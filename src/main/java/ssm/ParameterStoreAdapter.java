@@ -12,7 +12,7 @@ import java.util.Map;
 public class ParameterStoreAdapter implements ParameterStore {
     private final Map<Parameter, Parameter> parameters = new HashMap<>();
     private AWSSimpleSystemsManagement awsSimpleSystemsManagement;
-    private Environment environment;
+    private Environment defaultEnvironment;
 
     public ParameterStoreAdapter() {
         ClientConfiguration clientConfiguration = new ClientConfiguration();
@@ -28,7 +28,7 @@ public class ParameterStoreAdapter implements ParameterStore {
 
     @Override
     public String getValue(String name) {
-        return getValue(name, environment);
+        return getValue(name, defaultEnvironment);
     }
 
     /**
@@ -58,17 +58,17 @@ public class ParameterStoreAdapter implements ParameterStore {
     }
 
     @Override
-    public Environment getEnvironment() {
-        return environment;
+    public Environment getDefaultEnvironment() {
+        return defaultEnvironment;
     }
 
     /**
      * Sets the default label for this ParameterStoreAdapter.
      *
-     * @param environment
+     * @param defaultEnvironment
      */
     @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+    public void setDefaultEnvironment(Environment defaultEnvironment) {
+        this.defaultEnvironment = defaultEnvironment;
     }
 }

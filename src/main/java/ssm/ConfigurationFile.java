@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class ConfigurationFile implements ParameterStore {
     private final Map<Parameter, Parameter> parameters;
-    private Environment environment;
+    private Environment defaultEnvironment;
 
     public ConfigurationFile() throws IOException {
         this(ConfigurationFile.class.getClassLoader().getResourceAsStream("ParameterStore"));
@@ -25,14 +25,18 @@ public class ConfigurationFile implements ParameterStore {
             while ((line = bufferedReader.readLine()) != null) {
                 Pattern pattern = Pattern.compile("([^:]+):?(.+)?=(.+)");
                 Matcher matcher = pattern.matcher(line);
-                if (matcher.find() && matcher.groupCount() == 4) {
+                if (matcher.matches()) {
                     String name = matcher.group(1);
-                    Environment environment = Environment.valueOf(matcher.group(2));
+                    if (matcher.group(2) == null) {
+                        throw new IllegalArgumentException("Parameter definition's syntax is invalid: " + line + "\n" +
+                                "Example: key:defaultEnvironment=value");
+                    }
                     String value = matcher.group(3);
-                    Parameter parameter = new Parameter(name, environment, value);
+                    Parameter parameter = new Parameter(name, Environment.valueOf(matcher.group(2)), value);
                     parameters.put(parameter, parameter);
                 } else {
-                    throw new IllegalArgumentException("Parameter definition's syntax is invalid: " + line);
+                    throw new IllegalArgumentException("Parameter definition's syntax is invalid: " + line + "\n" +
+                            "Example: key:environment=value");
                 }
             }
         }
@@ -40,21 +44,22 @@ public class ConfigurationFile implements ParameterStore {
 
     @Override
     public String getValue(String name) {
-        return getValue(name, environment);
+        return getValue(name, defaultEnvironment);
     }
 
     @Override
     public String getValue(String name, Environment environment) {
-        return parameters.get(new Parameter(name, environment)).getValue();
+        Parameter parameter = parameters.get(new Parameter(name, environment));
+        return parameter == null ? null : parameter.getValue();
     }
 
     @Override
-    public Environment getEnvironment() {
-        return null;
+    public Environment getDefaultEnvironment() {
+        return defaultEnvironment;
     }
 
     @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+    public void setDefaultEnvironment(Environment defaultEnvironment) {
+        this.defaultEnvironment = defaultEnvironment;
     }
 }

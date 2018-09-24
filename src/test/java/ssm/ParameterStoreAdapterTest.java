@@ -8,8 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ParameterStoreAdapterTest {
     @Test
@@ -20,9 +19,15 @@ public class ParameterStoreAdapterTest {
         when(parameter.getValue()).thenReturn("value");
         when(getParameterResult.getParameter()).thenReturn(parameter);
         when(awsSimpleSystemsManagement.getParameter(any(GetParameterRequest.class))).thenReturn(getParameterResult);
-        ParameterStoreAdapter parameterStoreAdapter = new ParameterStoreAdapter(awsSimpleSystemsManagement);
-        parameterStoreAdapter.setEnvironment(Environment.TEST);
-        assertEquals("value", parameterStoreAdapter.getValue("key"));
+        ParameterStore parameterStore = new ParameterStoreAdapter(awsSimpleSystemsManagement);
+        parameterStore.setDefaultEnvironment(Environment.TEST);
+        assertEquals("value", parameterStore.getValue("key"));
+        verify(awsSimpleSystemsManagement).getParameter(any(GetParameterRequest.class));
+        verifyNoMoreInteractions(awsSimpleSystemsManagement);
+        verify(getParameterResult).getParameter();
+        verifyNoMoreInteractions(getParameterResult);
+        verify(parameter).getValue();
+        verifyNoMoreInteractions(parameter);
     }
 
     @Test
@@ -33,9 +38,15 @@ public class ParameterStoreAdapterTest {
         when(parameter.getValue()).thenReturn("value");
         when(getParameterResult.getParameter()).thenReturn(parameter);
         when(awsSimpleSystemsManagement.getParameter(any(GetParameterRequest.class))).thenReturn(getParameterResult);
-        ParameterStoreAdapter parameterStoreAdapter = new ParameterStoreAdapter(awsSimpleSystemsManagement);
-        parameterStoreAdapter.setEnvironment(Environment.TEST);
-        assertEquals("value", parameterStoreAdapter.getValue("key"));
-        assertEquals("value", parameterStoreAdapter.getValue("key"));
+        ParameterStore parameterStore = new ParameterStoreAdapter(awsSimpleSystemsManagement);
+        parameterStore.setDefaultEnvironment(Environment.TEST);
+        assertEquals("value", parameterStore.getValue("key"));
+        assertEquals("value", parameterStore.getValue("key"));
+        verify(awsSimpleSystemsManagement).getParameter(any(GetParameterRequest.class));
+        verifyNoMoreInteractions(awsSimpleSystemsManagement);
+        verify(getParameterResult).getParameter();
+        verifyNoMoreInteractions(getParameterResult);
+        verify(parameter).getValue();
+        verifyNoMoreInteractions(parameter);
     }
 }

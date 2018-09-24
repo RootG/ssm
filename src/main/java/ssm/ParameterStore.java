@@ -5,7 +5,7 @@ public interface ParameterStore {
 
     String getValue(String name, Environment environment);
 
-    Environment getEnvironment();
+    Environment getDefaultEnvironment();
 
-    void setEnvironment(Environment environment);
+    void setDefaultEnvironment(Environment defaultEnvironment);
 }
