@@ -6,13 +6,8 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterResult;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class ParameterStoreAdapter implements ParameterStore {
-    private final Map<Parameter, Parameter> parameters = new HashMap<>();
-    private AWSSimpleSystemsManagement awsSimpleSystemsManagement;
-    private Environment defaultEnvironment;
+public class ParameterStoreAdapter extends HashMapParameterStore {
+    private final AWSSimpleSystemsManagement awsSimpleSystemsManagement;
 
     public ParameterStoreAdapter() {
         ClientConfiguration clientConfiguration = new ClientConfiguration();
@@ -27,15 +22,10 @@ public class ParameterStoreAdapter implements ParameterStore {
     }
 
     @Override
-    public String getValue(String name) {
-        return getValue(name, defaultEnvironment);
-    }
-
-    @Override
     public String getValue(String name, Environment environment) {
-        Parameter parameter = parameters.get(new Parameter(name, environment));
-        if (parameter != null) {
-            return parameter.getValue();
+        String value = super.getValue(name, environment);
+        if (value != null) {
+            return value;
         }
         return getRemoteValue(name, environment);
     }
@@ -46,17 +36,7 @@ public class ParameterStoreAdapter implements ParameterStore {
         GetParameterResult getParameterResult = awsSimpleSystemsManagement.getParameter(getParameterRequest);
         String value = getParameterResult.getParameter().getValue();
         Parameter parameter = new Parameter(name, environment, value);
-        parameters.put(parameter, parameter);
+        addParameter(parameter);
         return value;
-    }
-
-    @Override
-    public Environment getDefaultEnvironment() {
-        return defaultEnvironment;
-    }
-
-    @Override
-    public void setDefaultEnvironment(Environment environment) {
-        this.defaultEnvironment = environment;
     }
 }

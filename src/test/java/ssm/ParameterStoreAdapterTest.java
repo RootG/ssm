@@ -21,7 +21,7 @@ public class ParameterStoreAdapterTest {
         when(awsSimpleSystemsManagement.getParameter(any(GetParameterRequest.class))).thenReturn(getParameterResult);
         ParameterStore parameterStore = new ParameterStoreAdapter(awsSimpleSystemsManagement);
         parameterStore.setDefaultEnvironment(Environment.TEST);
-        assertEquals("value", parameterStore.getValue("key"));
+        assertEquals("value", parameterStore.getValue("name"));
         verify(awsSimpleSystemsManagement).getParameter(any(GetParameterRequest.class));
         verifyNoMoreInteractions(awsSimpleSystemsManagement);
         verify(getParameterResult).getParameter();
@@ -40,8 +40,8 @@ public class ParameterStoreAdapterTest {
         when(awsSimpleSystemsManagement.getParameter(any(GetParameterRequest.class))).thenReturn(getParameterResult);
         ParameterStore parameterStore = new ParameterStoreAdapter(awsSimpleSystemsManagement);
         parameterStore.setDefaultEnvironment(Environment.TEST);
-        assertEquals("value", parameterStore.getValue("key"));
-        assertEquals("value", parameterStore.getValue("key"));
+        assertEquals("value", parameterStore.getValue("name"));
+        assertEquals("value", parameterStore.getValue("name"));
         verify(awsSimpleSystemsManagement).getParameter(any(GetParameterRequest.class));
         verifyNoMoreInteractions(awsSimpleSystemsManagement);
         verify(getParameterResult).getParameter();

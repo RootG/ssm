@@ -1,17 +1,17 @@
 package ssm.dropwizard.configuration;
 
 import org.apache.commons.text.lookup.StringLookup;
-import ssm.ParameterStoreAdapter;
+import ssm.ParameterStore;
 
 public class ParameterStoreLookup implements StringLookup {
-    private final ParameterStoreAdapter parameterStoreAdapter;
+    private final ParameterStore parameterStore;
 
-    public ParameterStoreLookup(ParameterStoreAdapter parameterStoreAdapter) {
-        this.parameterStoreAdapter = parameterStoreAdapter;
+    public ParameterStoreLookup(ParameterStore parameterStore) {
+        this.parameterStore = parameterStore;
     }
 
     @Override
     public String lookup(String s) {
-        return parameterStoreAdapter.getValue(s);
+        return parameterStore.getValue(s);
     }
 }
