@@ -44,12 +44,11 @@ public class Parameter {
     }
 
     /**
-     * Two Parameter are considered to be equal if they have the same name and same environment. In case of null labels,
-     * environment are considered to be same.
+     * Two Parameter are considered to be equal if they have the same name and same environment. In case of null
+     * environments, environments are considered to be same.
      *
      * @param object The object to compare this {@code Parameter} against.
-     * @return True if the given object represents a Parameter equivalent to this Parameter, false
-     * otherwise.
+     * @return True if the given object represents a Parameter equivalent to this Parameter, false otherwise.
      */
     @Override
     public boolean equals(Object object) {
@@ -70,8 +69,8 @@ public class Parameter {
     }
 
     /**
-     * Returns the hash code value for the object. This method is supported for the benefit of hash
-     * tables such as those provided by {@link HashMap}.
+     * Returns the hash code value for the object. This method is supported for the benefit of hash data structures
+     * such as those provided by {@link HashMap}.
      *
      * @return The hash code value for the object.
      */

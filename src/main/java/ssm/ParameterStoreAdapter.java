@@ -31,13 +31,6 @@ public class ParameterStoreAdapter implements ParameterStore {
         return getValue(name, defaultEnvironment);
     }
 
-    /**
-     * Retrieves the value of a parameter by it's name and label.
-     *
-     * @param name        The name of the parameter.
-     * @param environment The label of the parameter.
-     * @return The value of the parameter.
-     */
     @Override
     public String getValue(String name, Environment environment) {
         Parameter parameter = parameters.get(new Parameter(name, environment));
@@ -62,13 +55,8 @@ public class ParameterStoreAdapter implements ParameterStore {
         return defaultEnvironment;
     }
 
-    /**
-     * Sets the default label for this ParameterStoreAdapter.
-     *
-     * @param defaultEnvironment
-     */
     @Override
-    public void setDefaultEnvironment(Environment defaultEnvironment) {
-        this.defaultEnvironment = defaultEnvironment;
+    public void setDefaultEnvironment(Environment environment) {
+        this.defaultEnvironment = environment;
     }
 }

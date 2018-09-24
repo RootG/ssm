@@ -59,7 +59,7 @@ public class ConfigurationFile implements ParameterStore {
     }
 
     @Override
-    public void setDefaultEnvironment(Environment defaultEnvironment) {
-        this.defaultEnvironment = defaultEnvironment;
+    public void setDefaultEnvironment(Environment environment) {
+        this.defaultEnvironment = environment;
     }
 }
