@@ -6,9 +6,10 @@ public interface ParameterStore {
      *
      * @param name The name of the parameter.
      * @return The value.
+     * @throws ParameterNotFoundException Throws if a parameter can not be found.
      * @see {@link ParameterStore#setDefaultEnvironment(Environment)}
      */
-    String getValue(String name);
+    String getValue(String name) throws ParameterNotFoundException;
 
     /**
      * Returns the value of the parameter by using the given environment for it's environment.
@@ -16,8 +17,9 @@ public interface ParameterStore {
      * @param name        The name of the parameter.
      * @param environment The environment of the parameter.
      * @return The value
+     * @throws ParameterNotFoundException Throws if a parameter can not be found.
      */
-    String getValue(String name, Environment environment);
+    String getValue(String name, Environment environment) throws ParameterNotFoundException;
 
     /**
      * Sets the default environment for this {@code ParameterStore} object. Subsequent invocations of

@@ -39,4 +39,25 @@ public class ConfigurationFileTest {
         InputStream inputStream = new ByteArrayInputStream(("invalid syntax").getBytes());
         new ConfigurationFile(inputStream);
     }
+
+    /**
+     * Test of getValue method(String), of ConfigurationFile. Tests ParameterNotFoundException.
+     */
+    @Test(expected = ParameterNotFoundException.class)
+    public void getValueParameterNotFoundException() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(("name:TEST=value").getBytes());
+        ParameterStore parameterStore = new ConfigurationFile(inputStream);
+        parameterStore.getValue("invalid name");
+    }
+
+    /**
+     * Test of getValue method(String, Environment), of ConfigurationFile. Tests ParameterNotFoundException with
+     * wrong environment.
+     */
+    @Test(expected = ParameterNotFoundException.class)
+    public void getValueParameterNotFoundExceptionWrongEnvironment() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(("name:TEST=value").getBytes());
+        ParameterStore parameterStore = new ConfigurationFile(inputStream);
+        parameterStore.getValue("name", Environment.STAGING);
+    }
 }

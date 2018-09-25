@@ -6,6 +6,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class ParameterTest {
+    /**
+     * Test of equals method, of class Parameter.
+     */
     @Test
     public void testEquals() {
         Parameter parameter = new Parameter("name");

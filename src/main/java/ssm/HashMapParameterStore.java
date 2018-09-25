@@ -9,7 +9,10 @@ public class HashMapParameterStore extends AbstractParameterStore {
     @Override
     public String getValue(String name, Environment environment) {
         Parameter parameter = parameters.get(new Parameter(name, environment));
-        return parameter == null ? null : parameter.getValue();
+        if (parameter == null) {
+            throw new ParameterNotFoundException("Parameter \"name:" + environment + "\" does not exists.");
+        }
+        return parameter.getValue();
     }
 
     public void addParameter(Parameter parameter) {

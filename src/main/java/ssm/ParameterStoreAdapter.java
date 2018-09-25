@@ -5,6 +5,7 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterResult;
+import com.amazonaws.services.simplesystemsmanagement.model.ParameterVersionNotFoundException;
 
 public class ParameterStoreAdapter extends HashMapParameterStore {
     private final AWSSimpleSystemsManagement awsSimpleSystemsManagement;
@@ -23,9 +24,10 @@ public class ParameterStoreAdapter extends HashMapParameterStore {
 
     @Override
     public String getValue(String name, Environment environment) {
-        String value = super.getValue(name, environment);
-        if (value != null) {
-            return value;
+        try {
+            return super.getValue(name, environment);
+        } catch (ParameterNotFoundException e) {
+            // Continue with remote value.
         }
         return getRemoteValue(name, environment);
     }
@@ -33,7 +35,13 @@ public class ParameterStoreAdapter extends HashMapParameterStore {
     private String getRemoteValue(String name, Environment environment) {
         GetParameterRequest getParameterRequest = new GetParameterRequest();
         getParameterRequest.withName(name + ":" + environment.name()).setWithDecryption(true);
-        GetParameterResult getParameterResult = awsSimpleSystemsManagement.getParameter(getParameterRequest);
+        GetParameterResult getParameterResult;
+        try {
+            getParameterResult = awsSimpleSystemsManagement.getParameter(getParameterRequest);
+        } catch (com.amazonaws.services.simplesystemsmanagement.model.ParameterNotFoundException
+                | ParameterVersionNotFoundException e) {
+            throw new ParameterNotFoundException("Parameter \"name:" + environment + "\" does not exists.", e);
+        }
         String value = getParameterResult.getParameter().getValue();
         Parameter parameter = new Parameter(name, environment, value);
         addParameter(parameter);
