@@ -20,6 +20,6 @@ public class HashMapParameterStoreTest {
     public void getValueParameterNotFoundExceptionWrongEnvironment() {
         HashMapParameterStore hashMapParameterStore = new HashMapParameterStore();
         hashMapParameterStore.addParameter(new Parameter("name", Environment.TEST));
-        hashMapParameterStore.getValue("name", Environment.PRODUCTION);
+        hashMapParameterStore.getValue("name", Environment.DEVELOPMENT);
     }
 }

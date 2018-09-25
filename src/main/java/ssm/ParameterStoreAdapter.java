@@ -40,7 +40,7 @@ public class ParameterStoreAdapter extends HashMapParameterStore {
             getParameterResult = awsSimpleSystemsManagement.getParameter(getParameterRequest);
         } catch (com.amazonaws.services.simplesystemsmanagement.model.ParameterNotFoundException
                 | ParameterVersionNotFoundException e) {
-            throw new ParameterNotFoundException("Parameter \"name:" + environment + "\" does not exists.", e);
+            throw new ParameterNotFoundException("Parameter \"" + name + ":" + environment + "\" does not exists.", e);
         }
         String value = getParameterResult.getParameter().getValue();
         Parameter parameter = new Parameter(name, environment, value);
