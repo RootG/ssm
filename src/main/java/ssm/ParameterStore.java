@@ -7,7 +7,7 @@ public interface ParameterStore {
      * @param name The name of the parameter.
      * @return The value.
      * @throws ParameterNotFoundException Throws if a parameter can not be found.
-     * @see {@link ParameterStore#setDefaultEnvironment(Environment)}
+     * @see ParameterStore#setDefaultEnvironment(Environment)
      */
     String getValue(String name) throws ParameterNotFoundException;
 
