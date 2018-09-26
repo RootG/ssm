@@ -8,10 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConfigurationFile extends HashMapParameterStore {
-    public ConfigurationFile() throws IOException {
-        this(ConfigurationFile.class.getClassLoader().getResourceAsStream("ParameterStore"));
-    }
-
     public ConfigurationFile(InputStream inputStream) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
