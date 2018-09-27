@@ -32,9 +32,9 @@ public class ParameterStoreAdapter extends HashMapParameterStore {
         return getRemoteValue(name, environment);
     }
 
-    private String getRemoteValue(String name, Environment environment) {
+    public String getRemoteValue(String name, Environment environment) {
         GetParameterRequest getParameterRequest = new GetParameterRequest();
-        getParameterRequest.withName(name + ":" + environment.name()).setWithDecryption(true);
+        getParameterRequest.withName(name + ":" + environment).setWithDecryption(true);
         GetParameterResult getParameterResult;
         try {
             getParameterResult = awsSimpleSystemsManagement.getParameter(getParameterRequest);

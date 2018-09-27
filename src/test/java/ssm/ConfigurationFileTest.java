@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ConfigurationFileTest {
     @Test
-    public void testConfigure() throws IOException {
+    public void testConfigure() {
         InputStream inputStream = new ByteArrayInputStream(("name1:TEST=value1\n" +
                 "name2:TEST=value2\n" +
                 "name3:TEST=value3").getBytes());
@@ -23,19 +23,19 @@ public class ConfigurationFileTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testMissingEnvironment() throws IOException {
+    public void testMissingEnvironment() {
         InputStream inputStream = new ByteArrayInputStream(("name1=value1").getBytes());
         new ConfigurationFile(inputStream);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInvalidEnvironment() throws IOException {
+    public void testInvalidEnvironment() {
         InputStream inputStream = new ByteArrayInputStream(("name1:invalid=value1").getBytes());
         new ConfigurationFile(inputStream);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInvalidSyntax() throws IOException {
+    public void testInvalidSyntax() {
         InputStream inputStream = new ByteArrayInputStream(("invalid syntax").getBytes());
         new ConfigurationFile(inputStream);
     }
@@ -44,7 +44,7 @@ public class ConfigurationFileTest {
      * Test of getValue method(String), of ConfigurationFile. Tests ParameterNotFoundException.
      */
     @Test(expected = ParameterNotFoundException.class)
-    public void getValueParameterNotFoundException() throws IOException {
+    public void getValueParameterNotFoundException() {
         InputStream inputStream = new ByteArrayInputStream(("name:TEST=value").getBytes());
         ParameterStore parameterStore = new ConfigurationFile(inputStream);
         parameterStore.getValue("invalid name");
@@ -55,7 +55,7 @@ public class ConfigurationFileTest {
      * wrong environment.
      */
     @Test(expected = ParameterNotFoundException.class)
-    public void getValueParameterNotFoundExceptionWrongEnvironment() throws IOException {
+    public void getValueParameterNotFoundExceptionWrongEnvironment() {
         InputStream inputStream = new ByteArrayInputStream(("name:TEST=value").getBytes());
         ParameterStore parameterStore = new ConfigurationFile(inputStream);
         parameterStore.getValue("name", Environment.STAGING);

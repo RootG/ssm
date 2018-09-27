@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConfigurationFile extends HashMapParameterStore {
-    public ConfigurationFile(InputStream inputStream) throws IOException {
+    public ConfigurationFile(InputStream inputStream) {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             String line;
@@ -29,6 +30,8 @@ public class ConfigurationFile extends HashMapParameterStore {
                             "Example: name:environment=value");
                 }
             }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 }
