@@ -3,7 +3,6 @@ package ssm;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
@@ -11,9 +10,10 @@ import static org.junit.Assert.assertEquals;
 public class ConfigurationFileTest {
     @Test
     public void testConfigure() {
-        InputStream inputStream = new ByteArrayInputStream(("name1:TEST=value1\n" +
-                "name2:TEST=value2\n" +
-                "name3:TEST=value3").getBytes());
+        InputStream inputStream = new ByteArrayInputStream(
+                ("[{\"name\":\"name1\",\"environment\":\"TEST\",\"value\":\"value1\"}," +
+                        "{\"name\":\"name2\",\"environment\":\"TEST\",\"value\":\"value2\"}," +
+                        "{\"name\":\"name3\",\"environment\":\"TEST\",\"value\":\"value3\"}]").getBytes());
         ParameterStore parameterStore = new ConfigurationFile(inputStream);
         parameterStore.setDefaultEnvironment(Environment.TEST);
         assertEquals("value1", parameterStore.getValue("name1"));
@@ -23,14 +23,22 @@ public class ConfigurationFileTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testMissingName() {
+        InputStream inputStream = new ByteArrayInputStream(
+                ("[{\"environment\":\"TEST\",\"value\":\"value1\"}]").getBytes());
+        new ConfigurationFile(inputStream);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testMissingEnvironment() {
-        InputStream inputStream = new ByteArrayInputStream(("name1=value1").getBytes());
+        InputStream inputStream = new ByteArrayInputStream(("{\"name\":\"name1\",\"value\":\"value1\"}").getBytes());
         new ConfigurationFile(inputStream);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidEnvironment() {
-        InputStream inputStream = new ByteArrayInputStream(("name1:invalid=value1").getBytes());
+        InputStream inputStream = new ByteArrayInputStream(
+                ("[{\"name\":\"name1\",\"environment\":\"INVALID\",\"value\":\"value1\"}]").getBytes());
         new ConfigurationFile(inputStream);
     }
 
@@ -45,7 +53,8 @@ public class ConfigurationFileTest {
      */
     @Test(expected = ParameterNotFoundException.class)
     public void getValueParameterNotFoundException() {
-        InputStream inputStream = new ByteArrayInputStream(("name:TEST=value").getBytes());
+        InputStream inputStream = new ByteArrayInputStream((
+                "[{\"name\":\"name1\",\"environment\":\"TEST\",\"value\":\"value1\"}]").getBytes());
         ParameterStore parameterStore = new ConfigurationFile(inputStream);
         parameterStore.getValue("invalid name");
     }
@@ -56,7 +65,8 @@ public class ConfigurationFileTest {
      */
     @Test(expected = ParameterNotFoundException.class)
     public void getValueParameterNotFoundExceptionWrongEnvironment() {
-        InputStream inputStream = new ByteArrayInputStream(("name:TEST=value").getBytes());
+        InputStream inputStream = new ByteArrayInputStream(
+                ("[{\"name\":\"name1\",\"environment\":\"TEST\",\"value\":\"value1\"}]").getBytes());
         ParameterStore parameterStore = new ConfigurationFile(inputStream);
         parameterStore.getValue("name", Environment.STAGING);
     }

@@ -1,16 +1,14 @@
 package ssm;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.Objects;
 
 public class Parameter {
     private final String name;
-    private Environment environment;
+    private final Environment environment;
     private String value;
-
-    public Parameter(String name) {
-        this.name = name;
-    }
 
     public Parameter(String name, Environment environment) {
         this.name = name;
@@ -31,10 +29,6 @@ public class Parameter {
         return environment;
     }
 
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
-
     public String getValue() {
         return value;
     }
@@ -44,8 +38,7 @@ public class Parameter {
     }
 
     /**
-     * Two Parameter are considered to be equal if they have the same name and same environment. In case of null
-     * environments, environments are considered to be same.
+     * Two Parameter are considered to be equal if they have the same name and same environment.
      *
      * @param object The object to compare this {@code Parameter} against.
      * @return True if the given object represents a Parameter equivalent to this Parameter, false otherwise.
@@ -62,9 +55,6 @@ public class Parameter {
         if (hashCode() != parameter.hashCode()) {
             return false;
         }
-        if (environment == null) {
-            return name.equals(parameter.getName());
-        }
         return name.equals(parameter.getName()) && environment.equals(parameter.getEnvironment());
     }
 
@@ -79,5 +69,11 @@ public class Parameter {
         int hash = 17;
         hash = 157 * hash + Objects.hash(name, environment);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
