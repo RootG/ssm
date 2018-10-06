@@ -18,10 +18,11 @@ public class ParameterStoreFactory {
             LOGGER.warn("AWS Parameter Store Exception: " + e.getMessage());
         }
         LOGGER.warn("Initializing parameter store from configuration file.");
-        InputStream inputStream = ConfigurationFile.class.getClassLoader().getResourceAsStream("ParameterStore");
+        InputStream inputStream = ConfigurationFile.class.getClassLoader()
+                .getResourceAsStream("ParameterStore.json");
         if (inputStream == null) {
             throw new UncheckedIOException(
-                    new FileNotFoundException("\"ParameterStore\" file can not be found in resources."));
+                    new FileNotFoundException("\"ParameterStore.json\" file can not be found in resources."));
         }
         return new ConfigurationFile(inputStream);
     }
@@ -35,10 +36,10 @@ public class ParameterStoreFactory {
             LOGGER.warn("AWS Parameter Store Exception: " + e.getMessage());
         }
         LOGGER.warn("Initializing parameter store from configuration file.");
-        InputStream inputStream = ConfigurationFile.class.getClassLoader().getResourceAsStream("ParameterStore");
+        InputStream inputStream = ConfigurationFile.class.getClassLoader().getResourceAsStream("ParameterStore.json");
         if (inputStream == null) {
             throw new UncheckedIOException(
-                    new FileNotFoundException("\"ParameterStore\" file can not be found in resources."));
+                    new FileNotFoundException("\"ParameterStore.json\" file can not be found in resources."));
         }
         ConfigurationFile configurationFile = new ConfigurationFile(inputStream);
         configurationFile.setDefaultEnvironment(environment);
